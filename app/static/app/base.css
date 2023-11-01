@@ -1,0 +1,49 @@
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+#id_username {
+    border-radius: 5px;
+}
+#id_password1 {
+    border-radius: 5px;
+}
+#id_password2 {
+    border-radius: 5px;
+}
+
+@media only screen and (min-width: 1200px) {
+    .px690 {
+        /* width: 1200px; */
+        width: 85%;
+    }
+}
+
+@media only screen and (min-width: 590px) {
+    .px590 {
+        width: 590px;
+    }
+}
+
+@media only screen and (min-width: 490px) {
+    .px490 {
+        width: 490px;
+    }
+}

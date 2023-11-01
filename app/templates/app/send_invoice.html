@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between;">
+  <h4>{{ request.user.username }}</h3>
+  <span>
+    <a href="{% url 'send_invoice' %}" class="link-dark"><i class="fas fa-rotate"></i></a>
+    &nbsp; &nbsp; | &nbsp; &nbsp;
+    <a href="{% url 'signout' %}" class="link-dark"><i class="fas fa-arrow-right-from-bracket"></i></a>
+    &nbsp; &nbsp; | &nbsp; &nbsp;
+    <a href="http://localhost:8000/admin/" class="link-dark"><i class="fas fa-gears"></i></a>
+  </span>
+</div>
+
+<hr>
+
+<form id="invoice-form" action="{% url 'send_invoice' %}" method="post"> {% csrf_token %}
+
+    <select name="paypal" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        {% for paypal in paypals %}
+            <option value="{{ paypal.id }}">{{ paypal.email }} | {{ paypal.mode }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="row mb-4">
+
+      <div class="col-9">
+        <div class="form-outline">
+          <input name="email" type="email" class="form-control" required="true" />
+          <label class="form-label" for="email">Customer's Email</label>
+        </div>
+      </div>
+      
+      <div class="col-3">
+        <select id="currency" name="currency" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+          <option selected value="USD">USD</option>
+        </select> 
+      </div>
+
+      <!-- <div class="col-2">
+        <select id="mode" name="mode" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+          <option selected value="live">Live</option>
+          <option value="sandbox">Sandbox</option>
+        </select> 
+      </div> -->
+
+    </div>
+
+    {% block table %}
+    {% endblock table %}
+
+    <br>
+
+    <button id="submit-btn" type="submit" class="btn btn-primary btn-block mb-4">Send Invoice</button>
+    
+    <span id="copy-span" style="display: flex;">
+      <button class="btn btn-success clipboard" id="copy-btn">
+        Copy
+      </button>
+      &nbsp; 
+      <div class="form-outline">
+        <input id="copy-url" name="url" type="text" class="form-control"/>
+        <label class="form-label" for="url">Response URL</label>
+      </div>
+    </span>
+
+    <!-- <hr class="mt-5"> -->
+</form>
+
+<script>
+
+  const currencySelect = document.getElementById("currency")
+  const currencies = Intl.supportedValuesOf("currency")
+  const currenciesOptions = currencies.map(curr => {
+    if (curr == "USD") {
+      return `<option selected value="${curr}">${curr}</option>`
+    }
+    return `<option value="${curr}">${curr}</option>`
+  })
+  currencySelect.innerHTML = currenciesOptions.reduce((prev, curr) => {
+    return prev + curr
+  }, "")
+
+  const copyBtn = document.getElementById("copy-btn")
+  const copyUrl = document.getElementById("copy-url")
+  copyBtn.addEventListener('click', e => {
+    e.preventDefault()
+    navigator.clipboard.writeText(copyUrl.value)
+    copyBtn.innerHTML = "Copied"
+  })
+
+</script>
+
+{% endblock content %}
